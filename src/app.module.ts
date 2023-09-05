@@ -16,7 +16,10 @@ import { UsersModule } from './users/users.module';
     ProductModule,
     ReviewModule,
     ConfigModule.forRoot(),
-    MongooseModule.forRoot('mongodb://localhost/test'),
+    MongooseModule.forRoot(
+      'mongodb://admin:admin@localhost:27017/test?authSource=admin',
+    ),
+
     UsersModule,
   ],
   controllers: [AppController],
