@@ -10,7 +10,7 @@ jobs:
     steps:
       - uses: actions/checkout@master
       - name: Publish to registry
-        uses: elgohr/Publish-Docker-Github-Action@master
+        uses: elgohr/Publish-Docker-Github-Action@4
         with:
           registry: docker.pkg.github
           name: docker.pkg.github/Igor-W/top-api/top-api
