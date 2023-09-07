@@ -27,7 +27,6 @@ export class TopPageAdvantage {
 }
 @Schema({ timestamps: true })
 export class TopPageModel {
-  // _id: string;
   @Prop({ enum: TopLevelCategory })
   firstLevelCategory: TopLevelCategory;
 
@@ -59,4 +58,6 @@ export class TopPageModel {
   tags: string[];
 }
 
-export const TopPageModelSchema = SchemaFactory.createForClass(TopPageModel);
+export const TopPageModelSchema = SchemaFactory.createForClass(
+  TopPageModel,
+).index({ title: 'text', seoText: 'text' });

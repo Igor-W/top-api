@@ -4,6 +4,7 @@ import * as request from 'supertest';
 import { AppModule } from '../src/app.module';
 import { CreateReviewDto } from 'src/review/dto/create-review.dto';
 import { Types, disconnect } from 'mongoose';
+import { AuthDto } from 'src/auth/dto/auth.dto';
 
 const productId = new Types.ObjectId().toHexString();
 
@@ -14,7 +15,11 @@ const testDot: CreateReviewDto = {
   rating: 5,
   productId,
 };
-
+const loginDto: AuthDto = {
+  login: 'q@q.com',
+  password: '1',
+};
+let token: string;
 describe('AppController (e2e)', () => {
   let app: INestApplication;
 
@@ -27,6 +32,11 @@ describe('AppController (e2e)', () => {
 
     app = moduleFixture.createNestApplication();
     await app.init();
+
+    const { body } = await request(app.getHttpServer())
+      .post('/auth/login')
+      .send(loginDto);
+    token = body.access_token;
   });
 
   it('/review/create (POST)', (done) => {
@@ -51,7 +61,6 @@ describe('AppController (e2e)', () => {
       .get('/review/byProduct/' + productId)
       .expect(200)
       .then(({ body }: request.Response) => {
-        console.log(body);
         expect(body.length).toBe(1);
         done();
       });
@@ -61,7 +70,6 @@ describe('AppController (e2e)', () => {
       .get('/review/byProduct/' + new Types.ObjectId().toHexString())
       .expect(200)
       .then(({ body }: request.Response) => {
-        console.log(body);
         expect(body.length).toBe(0);
         done();
       });
@@ -70,11 +78,13 @@ describe('AppController (e2e)', () => {
   it('/review/:id (DELETE)', () => {
     return request(app.getHttpServer())
       .delete('/review/' + createdId)
+      .set('Authorization', 'Bearer ' + token)
       .expect(200);
   });
   it('/review/:id (DELETE) - fail', () => {
     return request(app.getHttpServer())
       .delete('/review/' + createdId)
+      .set('Authorization', 'Bearer ' + token)
       .expect(404);
   });
 
