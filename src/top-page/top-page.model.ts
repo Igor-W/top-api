@@ -56,6 +56,7 @@ export class TopPageModel {
 
   @Prop({ type: () => [String] })
   tags: string[];
+  updatedAt: Date;
 }
 
 export const TopPageModelSchema = SchemaFactory.createForClass(

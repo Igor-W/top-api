@@ -68,4 +68,8 @@ export class TopPageService {
     //   { alias: 1, secondCategory: 1, title: 1, category: 1 },
     // );
   }
+
+  findAll() {
+    return this.topPageModel.find().exec();
+  }
 }
